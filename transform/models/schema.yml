@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: stg_person
+    description: Clean person table at one row per patient.
+    columns:
+      - name: person_id
+        description: OMOP person primary key.
+        data_tests:
+          - unique
+          - not_null
+  - name: mart_patient_cohort
+    description: Person-grain research cohort with chronic-disease flags and utilization.
+    columns:
+      - name: person_id
+        data_tests:
+          - unique
+          - not_null
+      - name: has_t2dm
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+  - name: mart_county_prevalence
+    description: County-level prevalence for a public-health audience.
+    columns:
+      - name: fips
+        description: County FIPS code from location_source_value.
+        data_tests:
+          - not_null
+  - name: mart_data_quality
+    description: Simple CDM hygiene checks that a data manager would run before analysis.

@@ -1,0 +1,21 @@
+concept_id,concept_name,domain_id,vocabulary_id,concept_code,standard_concept
+8507,MALE,Gender,Gender,8507,S
+8532,FEMALE,Gender,Gender,8532,S
+8527,White,Race,Race,8527,S
+8516,Black or African American,Race,Race,8516,S
+8515,Asian,Race,Race,8515,S
+0,Unknown,Race,Race,0,
+38003563,Hispanic or Latino,Ethnicity,Ethnicity,38003563,S
+38003564,Not Hispanic or Latino,Ethnicity,Ethnicity,38003564,S
+201826,Type 2 diabetes mellitus,Condition,SNOMED,44054006,S
+316866,Essential hypertension,Condition,SNOMED,59621000,S
+433736,Obesity,Condition,SNOMED,414916001,S
+46271022,Chronic kidney disease,Condition,SNOMED,709044004,S
+4140453,Influenza,Condition,SNOMED,6142004,S
+31967,Nausea,Condition,SNOMED,422587007,S
+1503297,metformin,Drug,RxNorm,6809,S
+1308216,lisinopril,Drug,RxNorm,29046,S
+1112807,aspirin,Drug,RxNorm,1191,S
+9202,Outpatient Visit,Visit,Visit,9202,S
+9201,Inpatient Visit,Visit,Visit,9201,S
+9203,Emergency Room Visit,Visit,Visit,9203,S

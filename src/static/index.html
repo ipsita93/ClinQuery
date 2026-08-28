@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OMOP public health mart</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">Synthetic OMOP CDM · U.S. academic medicine showcase</p>
+    <h1>County chronic-disease data mart</h1>
+    <p class="lede">
+      A small, documented slice of person, visit, condition, and drug tables in OMOP style.
+      Ask a question — it calls the same named queries as the MCP tools.
+    </p>
+  </header>
+
+  <section class="ask" aria-label="Ask the data">
+    <form id="ask-form">
+      <label for="question">Ask the data</label>
+      <div class="ask-row">
+        <input id="question" name="question" type="text" autocomplete="off"
+               placeholder="e.g. What is hypertension prevalence by county?" />
+        <button type="submit">Ask</button>
+      </div>
+    </form>
+    <div id="chips" class="chips"></div>
+    <pre id="ask-out" class="ask-out" hidden></pre>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="grid">
+    <article class="card">
+      <h2>Condition events by year</h2>
+      <canvas id="trend-chart" height="220"></canvas>
+    </article>
+    <article class="card">
+      <h2>Hypertension % by county</h2>
+      <canvas id="county-chart" height="220"></canvas>
+    </article>
+  </section>
+
+  <section class="grid">
+    <article class="card">
+      <h2>Data quality</h2>
+      <p class="hint">Intentional issues in the sample (orphan person_ids, future visit dates) so a quality mart has something to show.</p>
+      <canvas id="quality-chart" height="180"></canvas>
+      <div id="quality-table"></div>
+    </article>
+    <article class="card">
+      <h2>County prevalence table</h2>
+      <div id="county-table"></div>
+    </article>
+  </section>
+
+  <section class="card">
+    <h2>Patient lookup</h2>
+    <p class="hint">Synthetic IDs only. Filter the person-level mart the same way the <code>lookup_patients</code> MCP tool does.</p>
+    <form id="lookup-form" class="filters">
+      <label>Condition
+        <select id="condition">
+          <option value="">All</option>
+          <option value="diabetes">Type 2 diabetes</option>
+          <option value="hypertension">Hypertension</option>
+          <option value="obesity">Obesity</option>
+          <option value="ckd">CKD</option>
+          <option value="influenza">Influenza</option>
+        </select>
+      </label>
+      <label>County
+        <input id="county" type="text" placeholder="San Francisco" />
+      </label>
+      <button type="submit">Filter</button>
+    </form>
+    <div id="lookup-table" class="table-wrap"></div>
+  </section>
+
+  <footer>
+    <p>Public-safe synthetic data. OMOP concept names are for demonstration, not a licensed vocabulary extract.</p>
+  </footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

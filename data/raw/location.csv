@@ -1,0 +1,7 @@
+location_id,city,state,county,zip,location_source_value
+1,Baltimore,MD,Baltimore City,21205,24510
+2,San Francisco,CA,San Francisco,94143,06075
+3,Stanford,CA,Santa Clara,94305,06085
+4,Oakland,CA,Alameda,94609,06001
+5,Rockville,MD,Montgomery,20850,24031
+6,Los Angeles,CA,Los Angeles,90095,06037

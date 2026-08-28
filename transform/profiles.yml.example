@@ -1,0 +1,20 @@
+# Copy to ~/.dbt/profiles.yml (or set DBT_PROFILES_DIR).
+# Default local run needs only DuckDB — no Snowflake account.
+
+omop_showcase:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: ../data/warehouse/omop_mart.duckdb
+      schema: analytics
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      schema: "{{ env_var('SNOWFLAKE_SCHEMA', 'ANALYTICS') }}"
+      threads: 4
