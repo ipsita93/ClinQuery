@@ -6,6 +6,14 @@ The project is designed to demonstrate practical skills in **clinical research i
 
 > **Important:** All data in this repository is synthetic. No real patient data, credentials, or protected health information (PHI) are included.
 
+## Dashboard
+
+[![ClinQuery dashboard](demo/Demo-screenshot.png)](demo/Demo-video.mp4)
+
+*Click the screenshot to watch the ClinQuery dashboard walkthrough.*
+
+The dashboard provides a researcher-facing interface for exploring synthetic clinical data, defining cohorts, reviewing population-level analytics, and inspecting data-quality indicators.
+
 ## What ClinQuery demonstrates
 
 ```text
@@ -98,6 +106,7 @@ ClinQuery/
 ├── transform/               # dbt models
 ├── reports/                 # Example research outputs
 ├── docs/                    # Architecture and methodology
+├── demo/                    # Dashboard screenshot and walkthrough
 └── README.md
 ```
 
@@ -147,6 +156,7 @@ Example questions include:
 * Show data quality issues.
 * Find Type 2 diabetes patients with ER visits.
 * Look up diabetes patients in San Francisco.
+* Find Type 2 diabetes patients in San Francisco aged 60 to 70.
 
 ## Data quality
 
@@ -156,7 +166,7 @@ This allows the project to demonstrate an important clinical research informatic
 
 > A research dataset is only useful when researchers can understand and trust its quality.
 
-The quality checks cover issues such as missing values, inconsistent records, and other conditions that could affect downstream research analyses.
+The quality checks cover issues such as missing values, inconsistent records, orphaned records, and other conditions that could affect downstream research analyses.
 
 ## Optional dbt transformation layer
 
@@ -175,6 +185,10 @@ The MCP tools expose a controlled set of data-access functions such as:
 * `ask_data`
 * `get_overview`
 * `lookup_patients`
+* `build_research_cohort`
+* `get_condition_trends`
+* `get_county_prevalence`
+* `get_data_quality`
 
 The intent is to demonstrate how natural-language interfaces can be placed on top of **auditable, explicitly defined data-access functions**, rather than allowing an AI system unrestricted database access.
 
@@ -212,4 +226,4 @@ Researcher-facing queries are implemented through defined functions and allowlis
 
 This project is an educational and portfolio demonstration using synthetic data. It is not a production clinical research data warehouse, does not contain real patient information, and does not represent an institutional implementation of Epic, OMOP, or any specific health system's clinical data environment.
 
-MIT License.
+**MIT License**
