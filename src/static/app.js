@@ -52,8 +52,8 @@ async function init() {
 
   $("kpis").innerHTML = [
     ["Patients", overview.patients],
-    ["T2DM %", overview.t2dm_pct],
-    ["Hypertension %", overview.htn_pct],
+    ["T2DM prevalence %", overview.t2dm_pct],
+    ["Hypertension prevalence %", overview.htn_pct],
     ["ER visits", overview.er_visits],
     ["Quality flags", overview.data_quality_issues],
   ]
