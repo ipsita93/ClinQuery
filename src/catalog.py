@@ -123,6 +123,97 @@ def lookup_patients(
     return _rows(sql, params)
 
 
+def build_research_cohort(
+    condition: str | None = None,
+    county: str | None = None,
+    visit_type: str | None = None,
+    medication: str | None = None,
+    min_age: int | None = None,
+    max_age: int | None = None,
+) -> list[dict[str, Any]]:
+    """Build a researcher-defined cohort from the person-level mart."""
+
+    where = ["1=1"]
+    params: list[Any] = []
+
+    condition_flags = {
+        "diabetes": "has_t2dm = 1",
+        "t2dm": "has_t2dm = 1",
+        "hypertension": "has_hypertension = 1",
+        "htn": "has_hypertension = 1",
+        "obesity": "has_obesity = 1",
+        "ckd": "has_ckd = 1",
+        "influenza": "has_influenza = 1",
+    }
+
+    medication_flags = {
+        "metformin": "on_metformin = 1",
+        "lisinopril": "on_lisinopril = 1",
+    }
+
+    if condition:
+        key = condition.strip().lower()
+        if key in condition_flags:
+            where.append(condition_flags[key])
+
+    if county:
+        where.append("lower(county) like ?")
+        params.append(f"%{county.strip().lower()}%")
+
+    if visit_type and visit_type.strip().lower() in {"er", "emergency", "emergency room"}:
+        where.append("er_visit_count > 0")
+
+    if medication:
+        key = medication.strip().lower()
+        if key in medication_flags:
+            where.append(medication_flags[key])
+
+    if min_age is not None:
+        where.append("age_years >= ?")
+        params.append(int(min_age))
+
+    if max_age is not None:
+        where.append("age_years <= ?")
+        params.append(int(max_age))
+
+    sql = f"""
+        select
+            person_id,
+            age_years,
+            gender,
+            race,
+            county,
+            state,
+            has_t2dm,
+            has_hypertension,
+            has_obesity,
+            has_ckd,
+            visit_count,
+            er_visit_count,
+            on_metformin,
+            on_lisinopril
+        from mart_patient_cohort
+        where {' and '.join(where)}
+        order by person_id
+    """
+
+    rows = _rows(sql, params)
+
+    return [
+        {
+            "patients": len(rows),
+            "criteria": {
+                "condition": condition,
+                "county": county,
+                "visit_type": visit_type,
+                "medication": medication,
+                "min_age": min_age,
+                "max_age": max_age,
+            },
+            "results": rows,
+        }
+    ]
+
 def t2dm_with_er() -> list[dict[str, Any]]:
     return _rows(
         """
@@ -183,6 +274,19 @@ TOOLS: dict[str, dict[str, Any]] = {
         "description": "Filter the person-level mart by condition and county. No PHI — synthetic IDs only.",
         "fn": lambda condition=None, county=None, limit=25, **_: lookup_patients(
             condition=condition, county=county, limit=limit
+        ),
+    },
+    "build_research_cohort": {
+        "title": "Build research cohort",
+        "description": "Build a researcher-defined patient cohort using clinical, demographic, utilization, and medication criteria.",
+        "fn": lambda condition=None, county=None, visit_type=None,
+                      medication=None, min_age=None, max_age=None, **_: build_research_cohort(
+            condition=condition,
+            county=county,
+            visit_type=visit_type,
+            medication=medication,
+            min_age=min_age,
+            max_age=max_age,
         ),
     },
     "t2dm_with_er": {

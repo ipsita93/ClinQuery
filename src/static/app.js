@@ -22,13 +22,89 @@ async function json(url, opts) {
 function renderAsk(payload) {
   const out = $("ask-out");
   out.hidden = false;
-  const slim = {
-    matched_tool: payload.matched_tool,
-    args: payload.args,
-    message: payload.message,
-    result: payload.result,
-  };
-  out.textContent = JSON.stringify(slim, null, 2);
+
+  const result = payload.result?.[0];
+
+  if (!result) {
+    out.innerHTML = `
+      <div class="ask-result">
+        <p class="hint">No results found.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const criteria = result.criteria || {};
+  const patients = result.results || [];
+
+  const criteriaLabels = [
+    criteria.condition && `Condition: ${criteria.condition}`,
+    criteria.county && `County: ${criteria.county}`,
+    criteria.medication && `Medication: ${criteria.medication}`,
+    criteria.min_age != null && `Age: ${criteria.min_age}+`,
+    criteria.max_age != null && `Age: ≤${criteria.max_age}`,
+    criteria.visit_type && `Visit: ${criteria.visit_type}`,
+  ].filter(Boolean);
+
+  out.innerHTML = `
+    <div class="ask-result">
+      <div class="ask-header">
+        <div>
+          <div class="ask-count">${result.patients}</div>
+          <div class="ask-label">patients matched</div>
+        </div>
+        <div class="ask-tool">
+          <span>Tool</span>
+          <strong>${payload.matched_tool}</strong>
+        </div>
+      </div>
+
+      <div class="criteria">
+        ${criteriaLabels
+          .map((c) => `<span class="criteria-chip">${c}</span>`)
+          .join("")}
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Patient ID</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Race</th>
+              <th>Visits</th>
+              <th>ER Visits</th>
+              <th>Metformin</th>
+              <th>Hypertension</th>
+              <th>Obesity</th>
+              <th>CKD</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${patients
+              .map(
+                (p) => `
+                  <tr>
+                    <td>${p.person_id}</td>
+                    <td>${p.age_years}</td>
+                    <td>${p.gender}</td>
+                    <td>${p.race}</td>
+                    <td>${p.visit_count}</td>
+                    <td>${p.er_visit_count}</td>
+                    <td>${p.on_metformin ? "Yes" : "No"}</td>
+                    <td>${p.has_hypertension ? "Yes" : "No"}</td>
+                    <td>${p.has_obesity ? "Yes" : "No"}</td>
+                    <td>${p.has_ckd ? "Yes" : "No"}</td>
+                  </tr>
+                `
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
 }
 
 async function ask(question) {

@@ -53,6 +53,14 @@ def route(question: str) -> dict[str, Any]:
                 county = "Santa Clara"
             break
 
+    min_age = None
+    max_age = None
+
+    age_range = re.search(r"(?:age(?:d)?\s*)?(\d{1,3})\s*(?:-|to)\s*(\d{1,3})", q)
+    if age_range:
+        min_age = int(age_range.group(1))
+        max_age = int(age_range.group(2))
+
     condition = None
     if _contains(q, "diabetes", "t2dm", "type 2"):
         condition = "diabetes"
@@ -65,7 +73,26 @@ def route(question: str) -> dict[str, Any]:
     elif _contains(q, "influenza", "flu"):
         condition = "influenza"
 
-    if _contains(q, "lookup", "list patients", "show patients", "table"):
+    medication = None
+    if _contains(q, "metformin"):
+        medication = "metformin"
+    elif _contains(q, "lisinopril"):
+        medication = "lisinopril"
+
+    if (
+        condition
+        and ("find" in q or "build" in q or "cohort" in q)
+        and (county or medication or min_age is not None or max_age is not None)
+    ):
+        tool, args = "build_research_cohort", {
+            "condition": condition,
+            "county": county,
+            "medication": medication,
+            "min_age": min_age,
+            "max_age": max_age,
+        }
+
+    elif _contains(q, "lookup", "list patients", "show patients", "table"):
         tool, args = "lookup_patients", {"condition": condition, "county": county, "limit": 25}
     elif _contains(q, "quality", "orphan", "future date", "data issue"):
         tool, args = "get_data_quality", {}

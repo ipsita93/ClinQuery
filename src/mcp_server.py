@@ -42,6 +42,35 @@ def _tool_defs() -> list[dict[str, Any]]:
                 "county": {"type": "string"},
                 "limit": {"type": "integer"},
             }
+            
+        if name == "build_research_cohort":
+            props = {
+                "condition": {
+                    "type": "string",
+                    "description": "diabetes, t2dm, hypertension, obesity, ckd, or influenza",
+                },
+                "county": {
+                    "type": "string",
+                    "description": "County name, e.g. Alameda",
+                },
+                "visit_type": {
+                    "type": "string",
+                    "description": "Use er for patients with at least one emergency visit",
+                },
+                "medication": {
+                    "type": "string",
+                    "description": "metformin or lisinopril",
+                },
+                "min_age": {
+                    "type": "integer",
+                    "description": "Minimum patient age",
+                },
+                "max_age": {
+                    "type": "integer",
+                    "description": "Maximum patient age",
+                },
+            }
+                
         defs.append(
             {
                 "name": name,

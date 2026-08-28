@@ -4,7 +4,7 @@ _Generated 2026-08-28. Not real patients. Not for clinical use._
 
 ## Cohort snapshot
 
-- **420** synthetic patients, **1449** visits, **4063** ER visits.
+- **420** synthetic patients, **1449** visits, **266** ER visits.
 - Type 2 diabetes: **42.1%**. Hypertension: **47.9%**. Obesity: **35.7%**.
 - Among T2DM patients, **47.5%** had at least one ER visit.
 - Metformin recorded for **88.7%** of T2DM patients.
@@ -13,12 +13,12 @@ _Generated 2026-08-28. Not real patients. Not for clinical use._
 
 | County | State | Patients | T2DM % | HTN % | Mean ER visits |
 | --- | --- | --- | --- | --- | --- |
-| Los Angeles | CA | 81 | 40.7 | 40.7 | 6.19 |
-| San Francisco | CA | 77 | 48.1 | 48.1 | 9.47 |
-| Baltimore City | MD | 76 | 39.5 | 51.3 | 13.61 |
-| Alameda | CA | 66 | 42.4 | 51.5 | 10.59 |
-| Santa Clara | CA | 63 | 39.7 | 49.2 | 8.84 |
-| Montgomery | MD | 57 | 42.1 | 47.4 | 9.53 |
+| Los Angeles | CA | 81 | 40.7 | 40.7 | 0.54 |
+| San Francisco | CA | 77 | 48.1 | 48.1 | 0.61 |
+| Baltimore City | MD | 76 | 39.5 | 51.3 | 0.62 |
+| Alameda | CA | 66 | 42.4 | 51.5 | 0.79 |
+| Santa Clara | CA | 63 | 39.7 | 49.2 | 0.71 |
+| Montgomery | MD | 57 | 42.1 | 47.4 | 0.54 |
 
 ## Data quality (intentional flags in the sample)
 

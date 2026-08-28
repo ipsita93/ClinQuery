@@ -93,3 +93,51 @@ th { color: var(--muted); font-weight: 600; }
 .table-wrap { overflow-x: auto; }
 footer { color: var(--muted); font-size: 0.8rem; }
 code { font-family: ui-monospace, Menlo, monospace; font-size: 0.85em; }
+.ask-result {
+  margin-top: 1rem;
+}
+
+.ask-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ask-count {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.ask-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.ask-tool {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.ask-tool strong {
+  display: block;
+  color: #222;
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+.criteria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.criteria-chip {
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: #eef3f8;
+  font-size: 0.85rem;
+}
