@@ -19,6 +19,9 @@ EXAMPLES = [
     "Metformin coverage for diabetes",
     "Lookup diabetes patients in San Francisco",
     "Condition trends by year",
+    "Find T2DM patients in Alameda taking metformin",
+    "Find T2DM patients in Alameda taking metformin aged 60 to 70",
+    "Type 2 diabetes patients with ER visits",
 ]
 
 
