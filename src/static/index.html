@@ -1,86 +1,373 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OMOP public health mart</title>
+
+  <title>ClinQuery — Clinical Research Cohort &amp; Data Intelligence Platform</title>
+
   <link rel="stylesheet" href="/static/styles.css" />
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
 </head>
+
 <body>
+
   <header class="hero">
-    <p class="eyebrow">Synthetic OMOP CDM · U.S. academic medicine showcase</p>
-    <h1>County chronic-disease data mart</h1>
-    <p class="lede">
-      A small, documented slice of person, visit, condition, and drug tables in OMOP style.
-      Ask a question — it calls the same named queries as the MCP tools.
-    </p>
+
+
+<p class="eyebrow">
+  Synthetic clinical research informatics · OMOP-inspired data platform
+</p>
+
+<h1>
+  ClinQuery
+</h1>
+
+<p class="hero-subtitle">
+  Clinical Research Cohort &amp; Data Intelligence Platform
+</p>
+
+<p class="lede">
+  An end-to-end clinical research data workflow for transforming synthetic
+  clinical data into research-ready datasets, analytical marts, patient
+  cohorts, and validated research insights.
+</p>
+
+<p class="byline">
+  Built by <strong>Ipsita Mohapatra</strong>
+</p>
+
+
   </header>
 
-  <section class="ask" aria-label="Ask the data">
-    <form id="ask-form">
-      <label for="question">Try a research question</label>
-      <div class="ask-row">
-        <input id="question" name="question" type="text" autocomplete="off"
-               placeholder="e.g. What is hypertension prevalence by county?" />
-        <button type="submit">Ask</button>
-      </div>
-    </form>
-    <div id="chips" class="chips"></div>
-    <pre id="ask-out" class="ask-out" hidden></pre>
+  <section class="ask" aria-label="Research question interface">
+
+
+<div class="section-heading">
+  <p class="eyebrow">Researcher interface</p>
+
+  <h2>Ask a research question</h2>
+
+  <p class="hint">
+    Enter a clinical research question to retrieve results from
+    controlled, predefined research queries.
+  </p>
+</div>
+
+<form id="ask-form">
+
+  <label for="question">
+    Research question
+  </label>
+
+  <div class="ask-row">
+
+    <input
+      id="question"
+      name="question"
+      type="text"
+      autocomplete="off"
+      placeholder="e.g. What is hypertension prevalence by county?"
+    />
+
+    <button type="submit">
+      Ask
+    </button>
+
+  </div>
+
+</form>
+
+<div id="chips" class="chips"></div>
+
+<pre id="ask-out" class="ask-out" hidden></pre>
+
+
   </section>
 
-  <section class="kpis" id="kpis"></section>
+  <section
+    class="kpis"
+    id="kpis"
+    aria-label="Cohort overview metrics"
+  ></section>
 
   <section class="grid">
-    <article class="card">
+
+
+<article class="card">
+
+  <div class="card-header">
+
+    <div>
+      <p class="eyebrow">Temporal analysis</p>
+
       <h2>Condition events by year</h2>
-      <canvas id="trend-chart" height="220"></canvas>
-    </article>
-    <article class="card">
-      <h2>Hypertension % by county</h2>
-      <canvas id="county-chart" height="220"></canvas>
-    </article>
+    </div>
+
+  </div>
+
+  <p class="hint">
+    Annual condition-event volume across the synthetic research population.
+  </p>
+
+  <canvas
+    id="trend-chart"
+    height="220"
+  ></canvas>
+
+</article>
+
+<article class="card">
+
+  <div class="card-header">
+
+    <div>
+      <p class="eyebrow">Geographic analysis</p>
+
+      <h2>Hypertension prevalence by county</h2>
+    </div>
+
+  </div>
+
+  <p class="hint">
+    County-level hypertension prevalence calculated from the research mart.
+  </p>
+
+  <canvas
+    id="county-chart"
+    height="220"
+  ></canvas>
+
+</article>
+
+
   </section>
 
   <section class="grid">
-    <article class="card">
+
+
+<article class="card">
+
+  <div class="card-header">
+
+    <div>
+      <p class="eyebrow">Validation</p>
+
       <h2>Data quality</h2>
-      <p class="hint">Intentional issues in the sample (orphan person_ids, future visit dates) so a quality mart has something to show.</p>
-      <canvas id="quality-chart" height="180"></canvas>
-      <div id="quality-table"></div>
-    </article>
-    <article class="card">
-      <h2>County prevalence table</h2>
-      <div id="county-table"></div>
-    </article>
+    </div>
+
+  </div>
+
+  <p class="hint">
+    Research data-quality checks identify issues that could affect
+    downstream analysis, including orphan records and invalid dates.
+  </p>
+
+  <canvas
+    id="quality-chart"
+    height="180"
+  ></canvas>
+
+  <div id="quality-table"></div>
+
+</article>
+
+<article class="card">
+
+  <div class="card-header">
+
+    <div>
+      <p class="eyebrow">Population analysis</p>
+
+      <h2>County prevalence</h2>
+    </div>
+
+  </div>
+
+  <p class="hint">
+    Summary statistics for chronic conditions across the synthetic
+    county-level population.
+  </p>
+
+  <div id="county-table"></div>
+
+</article>
+
+
   </section>
 
   <section class="card">
+
+
+<div class="card-header">
+
+  <div>
+    <p class="eyebrow">Cohort exploration</p>
+
     <h2>Patient lookup</h2>
-    <p class="hint">Synthetic IDs only. Filter the person-level mart the same way the <code>lookup_patients</code> MCP tool does.</p>
-    <form id="lookup-form" class="filters">
-      <label>Condition
-        <select id="condition">
-          <option value="">All</option>
-          <option value="diabetes">Type 2 diabetes</option>
-          <option value="hypertension">Hypertension</option>
-          <option value="obesity">Obesity</option>
-          <option value="ckd">CKD</option>
-          <option value="influenza">Influenza</option>
-        </select>
-      </label>
-      <label>County
-        <input id="county" type="text" placeholder="San Francisco" />
-      </label>
-      <button type="submit">Filter</button>
-    </form>
-    <div id="lookup-table" class="table-wrap"></div>
+  </div>
+
+</div>
+
+<p class="hint">
+  Explore synthetic patient records using controlled condition and
+  geographic filters. This interface demonstrates researcher-facing
+  access to the patient-level analytical mart.
+</p>
+
+<form id="lookup-form" class="filters">
+
+  <label for="condition">
+    Condition
+
+    <select id="condition">
+
+      <option value="">
+        All conditions
+      </option>
+
+      <option value="diabetes">
+        Type 2 diabetes
+      </option>
+
+      <option value="hypertension">
+        Hypertension
+      </option>
+
+      <option value="obesity">
+        Obesity
+      </option>
+
+      <option value="ckd">
+        Chronic kidney disease
+      </option>
+
+      <option value="influenza">
+        Influenza
+      </option>
+
+    </select>
+
+  </label>
+
+  <label for="county">
+    County
+
+    <input
+      id="county"
+      type="text"
+      placeholder="e.g. San Francisco"
+    />
+
+  </label>
+
+  <button type="submit">
+    Filter patients
+  </button>
+
+</form>
+
+<div
+  id="lookup-table"
+  class="table-wrap"
+></div>
+
+
+  </section>
+
+  <section class="grid">
+
+
+<article class="card">
+
+  <p class="eyebrow">About the platform</p>
+
+  <h2>Clinical research data workflow</h2>
+
+  <p>
+    ClinQuery demonstrates an end-to-end workflow for transforming
+    synthetic clinical data into research-ready datasets, analytical
+    marts, validated cohorts, and researcher-facing insights.
+  </p>
+
+  <ul>
+    <li>OMOP-inspired clinical data modeling</li>
+    <li>Python and SQL data transformation</li>
+    <li>DuckDB research warehouse</li>
+    <li>dbt transformation models</li>
+    <li>Clinical cohort definition</li>
+    <li>Research data-quality validation</li>
+    <li>Population and geographic analysis</li>
+    <li>Controlled researcher-facing queries</li>
+  </ul>
+
+</article>
+
+<article class="card">
+
+  <p class="eyebrow">Data &amp; methodology</p>
+
+  <h2>Public-safe demonstration</h2>
+
+  <p>
+    All records in this application are synthetic and are intended
+    solely to demonstrate clinical research informatics and healthcare
+    data engineering workflows.
+  </p>
+
+  <p>
+    The underlying model is inspired by OMOP conventions and includes
+    person, visit, condition, drug, concept, and location data.
+  </p>
+
+  <p class="hint">
+    OMOP concept names are used for demonstration and do not represent
+    a licensed vocabulary extract.
+  </p>
+
+</article>
+
+
   </section>
 
   <footer>
-    <p>Public-safe synthetic data. OMOP concept names are for demonstration, not a licensed vocabulary extract.</p>
+
+
+<p>
+  <strong>ClinQuery</strong> —
+  Clinical Research Cohort &amp; Data Intelligence Platform
+</p>
+
+<p>
+  Built by <strong>Ipsita Mohapatra</strong>
+</p>
+
+<p>
+  <a href="mailto:ipsitamohapatra93@gmail.com">
+    ipsitamohapatra93@gmail.com
+  </a>
+  ·
+  <a
+    href="https://www.linkedin.com/in/YOUR-LINKEDIN/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    LinkedIn
+  </a>
+</p>
+
+<p class="hint">
+  Public-safe synthetic data. No real patient data, credentials,
+  or protected health information (PHI) are included.
+</p>
+
+
   </footer>
+
   <script src="/static/app.js"></script>
+
 </body>
 </html>
