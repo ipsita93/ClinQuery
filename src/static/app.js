@@ -23,9 +23,9 @@ function renderAsk(payload) {
   const out = $("ask-out");
   out.hidden = false;
 
-  const result = payload.result?.[0];
+  const results = payload.result || [];
 
-  if (!result) {
+  if (!results.length) {
     out.innerHTML = `
       <div class="ask-result">
         <p class="hint">No results found.</p>
@@ -34,77 +34,117 @@ function renderAsk(payload) {
     return;
   }
 
-  const criteria = result.criteria || {};
-  const patients = result.results || [];
+  // Research cohort result
+  if (results.length === 1 && results[0].criteria && results[0].results) {
+    const result = results[0];
+    const criteria = result.criteria || {};
+    const patients = result.results || [];
 
-  const criteriaLabels = [
-    criteria.condition && `Condition: ${criteria.condition}`,
-    criteria.county && `County: ${criteria.county}`,
-    criteria.medication && `Medication: ${criteria.medication}`,
-    criteria.min_age != null && `Age: ${criteria.min_age}+`,
-    criteria.max_age != null && `Age: ≤${criteria.max_age}`,
-    criteria.visit_type && `Visit: ${criteria.visit_type}`,
-  ].filter(Boolean);
+    const criteriaLabels = [
+      criteria.condition && `Condition: ${criteria.condition}`,
+      criteria.county && `County: ${criteria.county}`,
+      criteria.medication && `Medication: ${criteria.medication}`,
+      criteria.min_age != null && `Age: ${criteria.min_age}+`,
+      criteria.max_age != null && `Age: ≤${criteria.max_age}`,
+      criteria.visit_type && `Visit: ${criteria.visit_type}`,
+    ].filter(Boolean);
 
-  out.innerHTML = `
-    <div class="ask-result">
-      <div class="ask-header">
-        <div>
-          <div class="ask-count">${result.patients}</div>
-          <div class="ask-label">patients matched</div>
+    out.innerHTML = `
+      <div class="ask-result">
+        <div class="ask-header">
+          <div>
+            <div class="ask-count">${result.patients}</div>
+            <div class="ask-label">patients matched</div>
+          </div>
+          <div class="ask-tool">
+            <span>Tool</span>
+            <strong>${payload.matched_tool}</strong>
+          </div>
         </div>
-        <div class="ask-tool">
-          <span>Tool</span>
-          <strong>${payload.matched_tool}</strong>
+
+        <div class="criteria">
+          ${criteriaLabels
+            .map((c) => `<span class="criteria-chip">${c}</span>`)
+            .join("")}
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Race</th>
+                <th>Visits</th>
+                <th>ER Visits</th>
+                <th>Metformin</th>
+                <th>Hypertension</th>
+                <th>Obesity</th>
+                <th>CKD</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${patients
+                .map(
+                  (p) => `
+                    <tr>
+                      <td>${p.person_id}</td>
+                      <td>${p.age_years}</td>
+                      <td>${p.gender}</td>
+                      <td>${p.race}</td>
+                      <td>${p.visit_count}</td>
+                      <td>${p.er_visit_count}</td>
+                      <td>${p.on_metformin ? "Yes" : "No"}</td>
+                      <td>${p.has_hypertension ? "Yes" : "No"}</td>
+                      <td>${p.has_obesity ? "Yes" : "No"}</td>
+                      <td>${p.has_ckd ? "Yes" : "No"}</td>
+                    </tr>
+                  `
+                )
+                .join("")}
+            </tbody>
+          </table>
         </div>
       </div>
+    `;
 
-      <div class="criteria">
-        ${criteriaLabels
-          .map((c) => `<span class="criteria-chip">${c}</span>`)
-          .join("")}
-      </div>
+    return;
+  }
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Patient ID</th>
-              <th>Age</th>
-              <th>Gender</th>
-              <th>Race</th>
-              <th>Visits</th>
-              <th>ER Visits</th>
-              <th>Metformin</th>
-              <th>Hypertension</th>
-              <th>Obesity</th>
-              <th>CKD</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${patients
-              .map(
-                (p) => `
-                  <tr>
-                    <td>${p.person_id}</td>
-                    <td>${p.age_years}</td>
-                    <td>${p.gender}</td>
-                    <td>${p.race}</td>
-                    <td>${p.visit_count}</td>
-                    <td>${p.er_visit_count}</td>
-                    <td>${p.on_metformin ? "Yes" : "No"}</td>
-                    <td>${p.has_hypertension ? "Yes" : "No"}</td>
-                    <td>${p.has_obesity ? "Yes" : "No"}</td>
-                    <td>${p.has_ckd ? "Yes" : "No"}</td>
-                  </tr>
-                `
-              )
-              .join("")}
-          </tbody>
-        </table>
+  // Generic summary / metric result
+  if (results.length === 1) {
+    const result = results[0];
+
+    const entries = Object.entries(result);
+
+    out.innerHTML = `
+      <div class="ask-result">
+        <div class="ask-header">
+          <div>
+            <div class="ask-label">Result</div>
+            <div class="ask-tool">
+              <strong>${payload.matched_tool}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="criteria">
+          ${entries
+            .map(
+              ([key, value]) =>
+                `<span class="criteria-chip"><strong>${key.replaceAll("_", " ")}:</strong> ${value ?? ""}</span>`
+            )
+            .join("")}
+        </div>
       </div>
-    </div>
-  `;
+    `;
+
+    return;
+  }
+
+  // Multi-row result: render as a table
+  table(out, results);
 }
 
 async function ask(question) {

@@ -15,13 +15,12 @@ EXAMPLES = [
     "How many patients are in the cohort?",
     "What is hypertension prevalence by county?",
     "Show data quality issues",
-    "Type 2 diabetes patients with ER visits",
     "Metformin coverage for diabetes",
     "Lookup diabetes patients in San Francisco",
     "Condition trends by year",
+    "Type 2 diabetes patients with ER visits",
     "Find T2DM patients in Alameda taking metformin",
     "Find T2DM patients in Alameda taking metformin aged 60 to 70",
-    "Type 2 diabetes patients with ER visits",
 ]
 
 
@@ -105,7 +104,7 @@ def route(question: str) -> dict[str, Any]:
         tool, args = "get_condition_trends", {}
     elif _contains(q, "metformin", "coverage", "drug"):
         tool, args = "metformin_coverage", {}
-    elif _contains(q, "er", "emergency") and _contains(q, "diabetes", "t2dm"):
+    elif (_contains(q, "emergency", "emergency room", "er visit", "er visits") and _contains(q, "diabetes", "t2dm", "type 2")):
         tool, args = "t2dm_with_er", {}
     elif _contains(q, "how many", "overview", "summary", "cohort"):
         tool, args = "get_overview", {}
